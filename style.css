@@ -4,39 +4,72 @@
 
 html,
 body {
-    margin: 0;
     width: 100%;
     height: 100%;
+
+    margin: 0;
+    padding: 0;
 }
 
 body {
+
     min-height: 100vh;
 
     display: flex;
-    flex-direction: column;
 
     justify-content: center;
     align-items: center;
-
-    font-family: Arial, sans-serif;
 
     background: #111;
 
     color: white;
 
+    font-family: Arial, sans-serif;
+
     overflow: hidden;
 
-    touch-action: none;
+    touch-action: manipulation;
 }
 
-h1 {
-    margin-bottom: 40px;
+
+/* ==================================
+   TÍTULO
+================================== */
+
+#titulo {
+
+    position: fixed;
+
+    top: 40px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 90%;
+
     text-align: center;
-    padding: 0 20px;
+
+    font-size: 28px;
+
+    z-index: 10;
+
+    pointer-events: none;
 }
+
+
+/* ==================================
+   BOTÃO
+================================== */
 
 #botaoFujao {
-    position: absolute;
+
+    position: fixed;
+
+    left: 50%;
+    top: 55%;
+
+    transform: translate(-50%, -50%);
 
     padding: 15px 30px;
 
@@ -46,23 +79,38 @@ h1 {
 
     border: none;
 
-    border-radius: 10px;
+    border-radius: 12px;
 
     cursor: pointer;
-
-    touch-action: none;
 
     user-select: none;
 
     -webkit-user-select: none;
+
+    touch-action: manipulation;
+
+    z-index: 1000;
+
+    transition:
+        left 0.7s ease,
+        top 0.7s ease;
 }
 
+
+/* ==================================
+   SURPRESA
+================================== */
+
 #surpresa {
+
     display: none;
 
     position: fixed;
 
     inset: 0;
+
+    width: 100%;
+    height: 100%;
 
     flex-direction: column;
 
@@ -79,60 +127,88 @@ h1 {
             #ff7eb3
         );
 
-    padding: 30px;
+    padding: 25px;
 
     overflow: hidden;
 
-    transform-origin: center;
+    z-index: 5000;
 
     animation:
         entradaSurpresa 5s linear;
 }
 
+
 #surpresa h1 {
+
     font-size: 42px;
-    margin-bottom: 20px;
+
+    margin: 10px;
 }
 
+
 #surpresa p {
+
     font-size: 24px;
 
     max-width: 700px;
 
     line-height: 1.5;
 
-    margin: 10px 20px;
+    margin: 15px;
 }
 
+
+/* ==================================
+   FOTO TEMPORÁRIA
+================================== */
+
 .sem-foto {
+
     width: 300px;
+
     height: 220px;
 
     display: flex;
 
-    justify-content: center;
-    align-items: center;
-
     flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
 
     border-radius: 20px;
 
-    background: rgba(255,255,255,0.2);
+    background:
+        rgba(255,255,255,0.2);
 
     font-size: 22px;
 
     margin: 20px;
 }
 
-#surpresa audio {
+
+/* ==================================
+   MÚSICA
+================================== */
+
+#musica {
+
     width: 350px;
-    max-width: 85vw;
+
+    max-width: 90%;
+
     margin-top: 15px;
 }
+
+
+/* ==================================
+   ANIMAÇÃO
+================================== */
 
 @keyframes entradaSurpresa {
 
     0% {
+
         opacity: 0;
 
         transform:
@@ -141,6 +217,7 @@ h1 {
     }
 
     100% {
+
         opacity: 1;
 
         transform:
@@ -149,63 +226,102 @@ h1 {
     }
 }
 
+
+/* ==================================
+   CORAÇÕES
+================================== */
+
 .coracao {
+
     position: fixed;
 
-    bottom: -30px;
+    bottom: -40px;
 
     pointer-events: none;
 
     z-index: 9999;
 }
 
+
+/* ==================================
+   CELULAR
+================================== */
+
 @media (max-width: 600px) {
 
-    h1 {
-        font-size: 26px;
-        margin-bottom: 30px;
+    #titulo {
+
+        top: 25px;
+
+        font-size: 23px;
     }
 
+
     #botaoFujao {
+
         padding: 13px 22px;
+
         font-size: 15px;
     }
 
+
     #surpresa {
+
         padding: 20px;
     }
 
+
     #surpresa h1 {
+
         font-size: 30px;
     }
 
+
     #surpresa p {
+
         font-size: 18px;
-        max-width: 90%;
     }
+
 
     .sem-foto {
+
         width: 220px;
+
         height: 180px;
-        margin: 15px;
     }
 
-    #surpresa audio {
+
+    #musica {
+
         width: 90%;
     }
 }
 
-@media (min-width: 601px) and (max-width: 1024px) {
+
+/* ==================================
+   TABLET
+================================== */
+
+@media
+(min-width: 601px)
+and
+(max-width: 1024px) {
+
+    #titulo {
+
+        font-size: 30px;
+    }
+
 
     #surpresa h1 {
+
         font-size: 38px;
     }
 
+
     #surpresa p {
+
         font-size: 22px;
     }
 
-    .sem-foto {
-        width: 280px;
-    }
 }
