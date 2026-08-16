@@ -132,7 +132,8 @@ function fugir(x, y) {
         const fraseAleatoria =
             frases[
                 Math.floor(
-                    Math.random() * frases.length
+                    Math.random() *
+                    frases.length
                 )
             ];
 
@@ -143,19 +144,18 @@ function fugir(x, y) {
     }
 }
 
+document.addEventListener(
+    "mousemove",
+    (event) => {
 
-// PC
-document.addEventListener("mousemove", (event) => {
+        fugir(
+            event.clientX,
+            event.clientY
+        );
 
-    fugir(
-        event.clientX,
-        event.clientY
-    );
+    }
+);
 
-});
-
-
-// CELULAR E TABLET
 document.addEventListener(
     "touchmove",
     (event) => {
@@ -173,13 +173,10 @@ document.addEventListener(
     { passive: true }
 );
 
-
-// CLIQUE NO BOTÃO
 botao.addEventListener("click", () => {
 
     cliques++;
 
-    // Ainda não chegou aos 4 cliques
     if (cliques < 4) {
 
         botao.textContent =
@@ -188,8 +185,6 @@ botao.addEventListener("click", () => {
         return;
     }
 
-
-    // 4 CLIQUES = DESBLOQUEIA
     const surpresa =
         document.getElementById("surpresa");
 
@@ -200,26 +195,23 @@ botao.addEventListener("click", () => {
 
     botao.style.display = "none";
 
-
-    // Música
     musica.play().catch(() => {
-        console.log("Autoplay bloqueado pelo navegador.");
+        console.log(
+            "O navegador bloqueou a reprodução automática."
+        );
     });
 
-
-    // Corações
     for (let i = 0; i < 20; i++) {
 
         setTimeout(() => {
+
             criarCoracao();
+
         }, i * 150);
 
     }
-
 });
 
-
-// CRIAR CORAÇÕES
 function criarCoracao() {
 
     const coracao =
@@ -270,6 +262,8 @@ function criarCoracao() {
     );
 
     setTimeout(() => {
+
         coracao.remove();
+
     }, duracao);
 }
