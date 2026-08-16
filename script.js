@@ -1,318 +1,183 @@
 const botao = document.getElementById("botaoFujao");
 
-let velocidade = 0.7;
+let velocidade = 0.8;
 let cliques = 0;
+let fugindo = false;
 
 const frases = [
     "QUASE, VIDA ❤️",
     "KKKKK VEM, AMOR ❤️",
     "TENTA DE NOVO, BABY 😘",
     "NÃO VAI CONSEGUIR, MEU AMOR ❤️",
-    "QUASE PEGOU, VIDA 😂❤️",
+    "QUASE PEGOU 😂❤️",
     "VEM CÁ, AMORZINHO 🥰",
     "AINDA NÃO, BABY ❤️",
-    "KKKKK TE AMO, MAS NÃO VOU DEIXAR 😂❤️",
+    "KKKKK TE AMO 😂❤️",
     "TENTA DE NOVO, MEU BEM 💕",
     "VEM ME PEGAR, VIDA 😘",
     "EU TE AMO ❤️",
     "QUASE, MEU AMOR 🥹❤️",
-    "CORRE ATRÁS DE MIM, BABY 😂💕",
+    "CORRE ATRÁS DE MIM 😂💕",
     "VOCÊ É FOFA DEMAIS ❤️",
-    "NÃO DESISTE, VIDA 🥰",
-    "AINDA FALTA 😈❤️",
-    "4 CLIQUES, AMOR ❤️",
-    "VOCÊ CONSEGUE, BABY 😘"
+    "NÃO DESISTE, VIDA 🥰"
 ];
 
 
-// Detecta se é celular ou tablet
+// ========================================
+// VERIFICA SE É CELULAR / TABLET
+// ========================================
+
 function ehTouch() {
-    return window.matchMedia("(pointer: coarse)").matches;
+    return (
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0
+    );
 }
 
 
-// Faz o botão fugir
-function fugir(x, y) {
+// ========================================
+// ESCOLHE UMA NOVA POSIÇÃO
+// ========================================
 
-    const rect = botao.getBoundingClientRect();
+function novaPosicaoTouch(x, y) {
 
-    const centroX =
-        rect.left + rect.width / 2;
+    const rect =
+        botao.getBoundingClientRect();
 
-    const centroY =
-        rect.top + rect.height / 2;
+    let novaX;
+    let novaY;
 
-    const distanciaX =
-        x - centroX;
+    let tentativas = 0;
 
-    const distanciaY =
-        y - centroY;
+    do {
 
-    const distancia =
-        Math.sqrt(
-            distanciaX * distanciaX +
-            distanciaY * distanciaY
-        );
+        novaX =
+            Math.random() *
+            (
+                window.innerWidth -
+                rect.width -
+                20
+            ) + 10;
 
+        novaY =
+            Math.random() *
+            (
+                window.innerHeight -
+                rect.height -
+                20
+            ) + 10;
 
-    // DISTÂNCIA DE DETECÇÃO
-    const distanciaFuga =
-        ehTouch() ? 150 : 100;
+        const centroX =
+            novaX + rect.width / 2;
 
+        const centroY =
+            novaY + rect.height / 2;
 
-    if (distancia < distanciaFuga) {
-
-        let novaX;
-        let novaY;
-
-
-        // =================================
-        // CELULAR / TABLET
-        // =================================
-
-        if (ehTouch()) {
-
-            // Cria uma posição aleatória
-            // bem longe do dedo
-
-            do {
-
-                novaX =
-                    Math.random() *
-                    (
-                        window.innerWidth -
-                        rect.width -
-                        20
-                    ) + 10;
-
-                novaY =
-                    Math.random() *
-                    (
-                        window.innerHeight -
-                        rect.height -
-                        20
-                    ) + 10;
-
-                const novaCentroX =
-                    novaX +
-                    rect.width / 2;
-
-                const novaCentroY =
-                    novaY +
-                    rect.height / 2;
-
-                const distanciaNova =
-                    Math.sqrt(
-                        Math.pow(
-                            x - novaCentroX,
-                            2
-                        ) +
-                        Math.pow(
-                            y - novaCentroY,
-                            2
-                        )
-                    );
-
-                // Continua sorteando enquanto
-                // estiver perto demais do dedo
-
-                if (distanciaNova > 250) {
-                    break;
-                }
-
-            } while (true);
-
-
-            // Movimento mais rápido no touch
-
-            botao.style.transition =
-                `all ${0.18 / velocidade}s ease`;
-        }
-
-
-        // =================================
-        // PC
-        // =================================
-
-        else {
-
-            const margem = 60;
-
-
-            if (centroX < margem) {
-
-                novaX =
-                    window.innerWidth -
-                    rect.width -
-                    margem;
-
-                novaY =
-                    Math.random() *
-                    (
-                        window.innerHeight -
-                        rect.height
-                    );
-            }
-
-
-            else if (
-                centroX >
-                window.innerWidth - margem
-            ) {
-
-                novaX = margem;
-
-                novaY =
-                    Math.random() *
-                    (
-                        window.innerHeight -
-                        rect.height
-                    );
-            }
-
-
-            else if (centroY < margem) {
-
-                novaX =
-                    Math.random() *
-                    (
-                        window.innerWidth -
-                        rect.width
-                    );
-
-                novaY =
-                    window.innerHeight -
-                    rect.height -
-                    margem;
-            }
-
-
-            else if (
-                centroY >
-                window.innerHeight - margem
-            ) {
-
-                novaX =
-                    Math.random() *
-                    (
-                        window.innerWidth -
-                        rect.width
-                    );
-
-                novaY = margem;
-            }
-
-
-            else {
-
-                novaX =
-                    centroX -
-                    distanciaX * 2;
-
-                novaY =
-                    centroY -
-                    distanciaY * 2;
-            }
-
-
-            novaX = Math.max(
-                10,
-                Math.min(
-                    novaX,
-                    window.innerWidth -
-                    rect.width -
-                    10
-                )
+        const distancia =
+            Math.sqrt(
+                Math.pow(x - centroX, 2) +
+                Math.pow(y - centroY, 2)
             );
 
+        tentativas++;
 
-            novaY = Math.max(
-                10,
-                Math.min(
-                    novaY,
-                    window.innerHeight -
-                    rect.height -
-                    10
-                )
-            );
-
-
-            botao.style.transition =
-                `all ${0.4 / velocidade}s ease`;
+        if (distancia > 280) {
+            break;
         }
 
-
-        // Aplica a nova posição
-
-        botao.style.left =
-            novaX + "px";
-
-        botao.style.top =
-            novaY + "px";
+    } while (tentativas < 50);
 
 
-        // Nova frase
+    novaX = Math.max(
+        10,
+        Math.min(
+            novaX,
+            window.innerWidth -
+            rect.width -
+            10
+        )
+    );
 
-        const fraseAleatoria =
-            frases[
-                Math.floor(
-                    Math.random() *
-                    frases.length
-                )
-            ];
+    novaY = Math.max(
+        10,
+        Math.min(
+            novaY,
+            window.innerHeight -
+            rect.height -
+            10
+        )
+    );
 
-        botao.textContent =
-            fraseAleatoria;
+
+    botao.style.transition =
+        `left ${0.18 / velocidade}s ease,
+         top ${0.18 / velocidade}s ease`;
+
+    botao.style.left =
+        novaX + "px";
+
+    botao.style.top =
+        novaY + "px";
 
 
-        // Aumenta a dificuldade
+    botao.textContent =
+        frases[
+            Math.floor(
+                Math.random() *
+                frases.length
+            )
+        ];
 
-        if (ehTouch()) {
 
-            velocidade += 0.12;
-
-        } else {
-
-            velocidade += 0.05;
-        }
-    }
+    velocidade += 0.12;
 }
 
 
-// =================================
-// PC
-// =================================
+// ========================================
+// TOUCH — FUGA IMEDIATA
+// ========================================
 
 document.addEventListener(
-    "mousemove",
+    "touchstart",
     (event) => {
 
-        fugir(
-            event.clientX,
-            event.clientY
-        );
-
-    }
-);
-
-
-// =================================
-// CELULAR / TABLET
-// =================================
-
-document.addEventListener(
-    "touchmove",
-    (event) => {
+        if (!ehTouch()) return;
 
         const toque =
             event.touches[0];
 
         if (!toque) return;
 
-        fugir(
-            toque.clientX,
-            toque.clientY
-        );
+
+        const rect =
+            botao.getBoundingClientRect();
+
+
+        const margem = 180;
+
+
+        const dentroDaArea =
+            toque.clientX >
+                rect.left - margem &&
+
+            toque.clientX <
+                rect.right + margem &&
+
+            toque.clientY >
+                rect.top - margem &&
+
+            toque.clientY <
+                rect.bottom + margem;
+
+
+        if (dentroDaArea) {
+
+            novaPosicaoTouch(
+                toque.clientX,
+                toque.clientY
+            );
+
+        }
 
     },
     {
@@ -321,9 +186,122 @@ document.addEventListener(
 );
 
 
-// =================================
+// ========================================
+// TOUCHMOVE
+// ========================================
+
+document.addEventListener(
+    "touchmove",
+    (event) => {
+
+        if (!ehTouch()) return;
+
+        const toque =
+            event.touches[0];
+
+        if (!toque) return;
+
+
+        const rect =
+            botao.getBoundingClientRect();
+
+
+        const centroX =
+            rect.left +
+            rect.width / 2;
+
+        const centroY =
+            rect.top +
+            rect.height / 2;
+
+
+        const distancia =
+            Math.sqrt(
+                Math.pow(
+                    toque.clientX -
+                    centroX,
+                    2
+                ) +
+                Math.pow(
+                    toque.clientY -
+                    centroY,
+                    2
+                )
+            );
+
+
+        // ÁREA GRANDE DE FUGA
+
+        if (distancia < 220) {
+
+            novaPosicaoTouch(
+                toque.clientX,
+                toque.clientY
+            );
+
+        }
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+// ========================================
+// PC — MOUSE
+// ========================================
+
+document.addEventListener(
+    "mousemove",
+    (event) => {
+
+        if (ehTouch()) return;
+
+        const rect =
+            botao.getBoundingClientRect();
+
+
+        const centroX =
+            rect.left +
+            rect.width / 2;
+
+        const centroY =
+            rect.top +
+            rect.height / 2;
+
+
+        const distancia =
+            Math.sqrt(
+                Math.pow(
+                    event.clientX -
+                    centroX,
+                    2
+                ) +
+                Math.pow(
+                    event.clientY -
+                    centroY,
+                    2
+                )
+            );
+
+
+        if (distancia < 120) {
+
+            novaPosicaoTouch(
+                event.clientX,
+                event.clientY
+            );
+
+        }
+
+    }
+);
+
+
+// ========================================
 // CLIQUE
-// =================================
+// ========================================
 
 botao.addEventListener(
     "click",
@@ -331,8 +309,6 @@ botao.addEventListener(
 
         cliques++;
 
-
-        // Ainda não chegou aos 4
 
         if (cliques < 4) {
 
@@ -342,10 +318,6 @@ botao.addEventListener(
             return;
         }
 
-
-        // =================================
-        // 4 CLIQUES
-        // =================================
 
         const surpresa =
             document.getElementById(
@@ -365,8 +337,6 @@ botao.addEventListener(
             "none";
 
 
-        // Música
-
         musica.play().catch(() => {
 
             console.log(
@@ -376,10 +346,6 @@ botao.addEventListener(
         });
 
 
-        // =================================
-        // CORAÇÕES
-        // =================================
-
         for (
             let i = 0;
             i < 20;
@@ -387,47 +353,36 @@ botao.addEventListener(
         ) {
 
             setTimeout(
-                () => {
-
-                    criarCoracao();
-
-                },
+                criarCoracao,
                 i * 150
             );
+
         }
 
     }
 );
 
 
-// =================================
+// ========================================
 // CORAÇÕES
-// =================================
+// ========================================
 
 function criarCoracao() {
 
     const coracao =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     coracao.innerHTML =
         "❤️";
 
-
     coracao.style.position =
         "fixed";
 
-
     coracao.style.left =
-        Math.random() * 100 +
-        "vw";
-
+        Math.random() * 100 + "vw";
 
     coracao.style.bottom =
         "-30px";
-
 
     coracao.style.fontSize =
         (
@@ -435,10 +390,8 @@ function criarCoracao() {
             Math.random() * 25
         ) + "px";
 
-
     coracao.style.zIndex =
         "9999";
-
 
     coracao.style.pointerEvents =
         "none";
@@ -483,11 +436,7 @@ function criarCoracao() {
 
 
     setTimeout(
-        () => {
-
-            coracao.remove();
-
-        },
+        () => coracao.remove(),
         duracao
     );
 }
