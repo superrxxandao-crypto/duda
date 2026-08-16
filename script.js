@@ -5,40 +5,39 @@ let velocidade = 0.8;
 
 const frases = [
     "QUASE, VIDA ❤️",
-    "KKKKK VEM, AMOR ❤️",
-    "TENTA DE NOVO, BABY 😘",
-    "NÃO VAI CONSEGUIR, MEU AMOR ❤️",
-    "QUASE PEGOU 😂❤️",
-    "VEM CÁ, AMORZINHO 🥰",
-    "AINDA NÃO, BABY ❤️",
-    "KKKKK TE AMO 😂❤️",
-    "TENTA DE NOVO, MEU BEM 💕",
-    "VEM ME PEGAR, VIDA 😘",
+    "VEM CÁ, AMOR 😘",
+    "TENTA DE NOVO, BABY ❤️",
+    "PEGA EU 😂❤️",
+    "QUASE PEGOU 😈❤️",
+    "VEM, VIDA 🥰",
+    "AINDA NÃO, AMOR ❤️",
+    "TE AMO, MAS VOU FUGIR 😂",
+    "TENTA DE NOVO 💕",
+    "VEM ME PEGAR 😘",
     "EU TE AMO ❤️",
-    "QUASE, MEU AMOR 🥹❤️",
+    "QUASE, MEU AMOR 🥹",
     "CORRE ATRÁS DE MIM 😂💕",
-    "VOCÊ É FOFA DEMAIS ❤️",
+    "VOCÊ CONSEGUE ❤️",
     "NÃO DESISTE, VIDA 🥰"
 ];
 
 
 // ========================================
-// FAZER O BOTÃO FUGIR
+// PEGAR POSIÇÃO ALEATÓRIA
 // ========================================
 
-function fugir() {
+function moverAutomaticamente() {
+
+    if (botao.style.display === "none") {
+        return;
+    }
 
     const rect =
         botao.getBoundingClientRect();
 
-    let novaX;
-    let novaY;
+    const margem = 20;
 
-    const margem = 15;
-
-    // Escolhe uma posição completamente aleatória
-
-    novaX =
+    const novaX =
         Math.random() *
         (
             window.innerWidth -
@@ -46,7 +45,7 @@ function fugir() {
             margem * 2
         ) + margem;
 
-    novaY =
+    const novaY =
         Math.random() *
         (
             window.innerHeight -
@@ -54,75 +53,49 @@ function fugir() {
             margem * 2
         ) + margem;
 
-
-    // Garante que não saia da tela
-
-    novaX = Math.max(
-        margem,
-        Math.min(
-            novaX,
-            window.innerWidth -
-            rect.width -
-            margem
-        )
-    );
-
-    novaY = Math.max(
-        margem,
-        Math.min(
-            novaY,
-            window.innerHeight -
-            rect.height -
-            margem
-        )
-    );
-
-
-    // Quanto mais cliques,
-    // mais rápido ele foge
 
     botao.style.transition =
-        `left ${0.25 / velocidade}s ease,
-         top ${0.25 / velocidade}s ease`;
-
+        `left ${1.2 / velocidade}s ease,
+         top ${1.2 / velocidade}s ease`;
 
     botao.style.left =
         novaX + "px";
 
     botao.style.top =
         novaY + "px";
-
-
-    // Frase aleatória
-
-    botao.textContent =
-        frases[
-            Math.floor(
-                Math.random() *
-                frases.length
-            )
-        ];
-
-
-    // Aumenta a velocidade
-
-    velocidade += 0.15;
 }
 
 
 // ========================================
-// CLIQUE / TOQUE
+// MOVIMENTO AUTOMÁTICO
+// ========================================
+
+function iniciarMovimento() {
+
+    setInterval(() => {
+
+        moverAutomaticamente();
+
+    }, 1200);
+
+}
+
+
+// ========================================
+// TOQUE / CLIQUE
 // ========================================
 
 botao.addEventListener(
-    "click",
-    () => {
+    "pointerup",
+    (event) => {
+
+        event.preventDefault();
 
         cliques++;
 
 
         // =================================
-        // PRIMEIRO, SEGUNDO E TERCEIRO
+        // 1º, 2º E 3º
         // =================================
 
         if (cliques < 4) {
@@ -130,26 +103,16 @@ botao.addEventListener(
             botao.textContent =
                 `${cliques}/4 ❤️`;
 
+            velocidade += 0.15;
 
-            // Espera um pouquinho para
-            // mostrar o contador e foge
-
-            setTimeout(
-                () => {
-
-                    fugir();
-
-                },
-                100
-            );
-
+            moverAutomaticamente();
 
             return;
         }
 
 
         // =================================
-        // QUARTO CLIQUE
+        // 4º CLIQUE
         // =================================
 
         const surpresa =
@@ -163,19 +126,12 @@ botao.addEventListener(
             );
 
 
-        // Esconde o botão
-
         botao.style.display =
             "none";
-
-
-        // Mostra surpresa
 
         surpresa.style.display =
             "flex";
 
-
-        // Toca música
 
         musica.play().catch(() => {
 
@@ -197,11 +153,7 @@ botao.addEventListener(
         ) {
 
             setTimeout(
-                () => {
-
-                    criarCoracao();
-
-                },
+                criarCoracao,
                 i * 120
             );
 
@@ -218,23 +170,16 @@ botao.addEventListener(
 function criarCoracao() {
 
     const coracao =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     coracao.innerHTML =
         "❤️";
 
-
     coracao.className =
         "coracao";
 
-
     coracao.style.left =
-        Math.random() * 100 +
-        "vw";
-
+        Math.random() * 100 + "vw";
 
     coracao.style.fontSize =
         (
@@ -283,14 +228,18 @@ function criarCoracao() {
 
     setTimeout(
         () => {
-
             coracao.remove();
-
         },
         duracao
     );
 }
 
+
+// ========================================
+// COMEÇA A ANDAR
+// ========================================
+
+iniciarMovimento();
         coracao.remove();
 
     }, duracao);
