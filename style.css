@@ -1,0 +1,211 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    font-family: Arial, sans-serif;
+
+    background: #111;
+
+    color: white;
+
+    overflow: hidden;
+
+    touch-action: none;
+}
+
+h1 {
+    margin-bottom: 40px;
+    text-align: center;
+    padding: 0 20px;
+}
+
+#botaoFujao {
+    position: absolute;
+
+    padding: 15px 30px;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    border: none;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    touch-action: none;
+
+    user-select: none;
+
+    -webkit-user-select: none;
+}
+
+#surpresa {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff758c,
+            #ff7eb3
+        );
+
+    padding: 30px;
+
+    overflow: hidden;
+
+    transform-origin: center;
+
+    animation:
+        entradaSurpresa 5s linear;
+}
+
+#surpresa h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+}
+
+#surpresa p {
+    font-size: 24px;
+
+    max-width: 700px;
+
+    line-height: 1.5;
+
+    margin: 10px 20px;
+}
+
+.sem-foto {
+    width: 300px;
+    height: 220px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    flex-direction: column;
+
+    border-radius: 20px;
+
+    background: rgba(255,255,255,0.2);
+
+    font-size: 22px;
+
+    margin: 20px;
+}
+
+#surpresa audio {
+    width: 350px;
+    max-width: 85vw;
+    margin-top: 15px;
+}
+
+@keyframes entradaSurpresa {
+
+    0% {
+        opacity: 0;
+
+        transform:
+            scale(0.05)
+            rotate(0deg);
+    }
+
+    100% {
+        opacity: 1;
+
+        transform:
+            scale(1)
+            rotate(360deg);
+    }
+}
+
+.coracao {
+    position: fixed;
+
+    bottom: -30px;
+
+    pointer-events: none;
+
+    z-index: 9999;
+}
+
+@media (max-width: 600px) {
+
+    h1 {
+        font-size: 26px;
+        margin-bottom: 30px;
+    }
+
+    #botaoFujao {
+        padding: 13px 22px;
+        font-size: 15px;
+    }
+
+    #surpresa {
+        padding: 20px;
+    }
+
+    #surpresa h1 {
+        font-size: 30px;
+    }
+
+    #surpresa p {
+        font-size: 18px;
+        max-width: 90%;
+    }
+
+    .sem-foto {
+        width: 220px;
+        height: 180px;
+        margin: 15px;
+    }
+
+    #surpresa audio {
+        width: 90%;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+
+    #surpresa h1 {
+        font-size: 38px;
+    }
+
+    #surpresa p {
+        font-size: 22px;
+    }
+
+    .sem-foto {
+        width: 280px;
+    }
+}
