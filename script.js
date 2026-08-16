@@ -1,8 +1,7 @@
 const botao = document.getElementById("botaoFujao");
 
-let velocidade = 0.8;
 let cliques = 0;
-let fugindo = false;
+let velocidade = 0.8;
 
 const frases = [
     "QUASE, VIDA ❤️",
@@ -24,22 +23,10 @@ const frases = [
 
 
 // ========================================
-// VERIFICA SE É CELULAR / TABLET
+// FAZER O BOTÃO FUGIR
 // ========================================
 
-function ehTouch() {
-    return (
-        "ontouchstart" in window ||
-        navigator.maxTouchPoints > 0
-    );
-}
-
-
-// ========================================
-// ESCOLHE UMA NOVA POSIÇÃO
-// ========================================
-
-function novaPosicaoTouch(x, y) {
+function fugir() {
 
     const rect =
         botao.getBoundingClientRect();
@@ -47,71 +34,57 @@ function novaPosicaoTouch(x, y) {
     let novaX;
     let novaY;
 
-    let tentativas = 0;
+    const margem = 15;
 
-    do {
+    // Escolhe uma posição completamente aleatória
 
-        novaX =
-            Math.random() *
-            (
-                window.innerWidth -
-                rect.width -
-                20
-            ) + 10;
+    novaX =
+        Math.random() *
+        (
+            window.innerWidth -
+            rect.width -
+            margem * 2
+        ) + margem;
 
-        novaY =
-            Math.random() *
-            (
-                window.innerHeight -
-                rect.height -
-                20
-            ) + 10;
+    novaY =
+        Math.random() *
+        (
+            window.innerHeight -
+            rect.height -
+            margem * 2
+        ) + margem;
 
-        const centroX =
-            novaX + rect.width / 2;
 
-        const centroY =
-            novaY + rect.height / 2;
-
-        const distancia =
-            Math.sqrt(
-                Math.pow(x - centroX, 2) +
-                Math.pow(y - centroY, 2)
-            );
-
-        tentativas++;
-
-        if (distancia > 280) {
-            break;
-        }
-
-    } while (tentativas < 50);
-
+    // Garante que não saia da tela
 
     novaX = Math.max(
-        10,
+        margem,
         Math.min(
             novaX,
             window.innerWidth -
             rect.width -
-            10
+            margem
         )
     );
 
     novaY = Math.max(
-        10,
+        margem,
         Math.min(
             novaY,
             window.innerHeight -
             rect.height -
-            10
+            margem
         )
     );
 
 
+    // Quanto mais cliques,
+    // mais rápido ele foge
+
     botao.style.transition =
-        `left ${0.18 / velocidade}s ease,
-         top ${0.18 / velocidade}s ease`;
+        `left ${0.25 / velocidade}s ease,
+         top ${0.25 / velocidade}s ease`;
+
 
     botao.style.left =
         novaX + "px";
@@ -119,6 +92,8 @@ function novaPosicaoTouch(x, y) {
     botao.style.top =
         novaY + "px";
 
+
+    // Frase aleatória
 
     botao.textContent =
         frases[
@@ -129,178 +104,14 @@ function novaPosicaoTouch(x, y) {
         ];
 
 
-    velocidade += 0.12;
+    // Aumenta a velocidade
+
+    velocidade += 0.15;
 }
 
 
 // ========================================
-// TOUCH — FUGA IMEDIATA
-// ========================================
-
-document.addEventListener(
-    "touchstart",
-    (event) => {
-
-        if (!ehTouch()) return;
-
-        const toque =
-            event.touches[0];
-
-        if (!toque) return;
-
-
-        const rect =
-            botao.getBoundingClientRect();
-
-
-        const margem = 180;
-
-
-        const dentroDaArea =
-            toque.clientX >
-                rect.left - margem &&
-
-            toque.clientX <
-                rect.right + margem &&
-
-            toque.clientY >
-                rect.top - margem &&
-
-            toque.clientY <
-                rect.bottom + margem;
-
-
-        if (dentroDaArea) {
-
-            novaPosicaoTouch(
-                toque.clientX,
-                toque.clientY
-            );
-
-        }
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-// ========================================
-// TOUCHMOVE
-// ========================================
-
-document.addEventListener(
-    "touchmove",
-    (event) => {
-
-        if (!ehTouch()) return;
-
-        const toque =
-            event.touches[0];
-
-        if (!toque) return;
-
-
-        const rect =
-            botao.getBoundingClientRect();
-
-
-        const centroX =
-            rect.left +
-            rect.width / 2;
-
-        const centroY =
-            rect.top +
-            rect.height / 2;
-
-
-        const distancia =
-            Math.sqrt(
-                Math.pow(
-                    toque.clientX -
-                    centroX,
-                    2
-                ) +
-                Math.pow(
-                    toque.clientY -
-                    centroY,
-                    2
-                )
-            );
-
-
-        // ÁREA GRANDE DE FUGA
-
-        if (distancia < 220) {
-
-            novaPosicaoTouch(
-                toque.clientX,
-                toque.clientY
-            );
-
-        }
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-// ========================================
-// PC — MOUSE
-// ========================================
-
-document.addEventListener(
-    "mousemove",
-    (event) => {
-
-        if (ehTouch()) return;
-
-        const rect =
-            botao.getBoundingClientRect();
-
-
-        const centroX =
-            rect.left +
-            rect.width / 2;
-
-        const centroY =
-            rect.top +
-            rect.height / 2;
-
-
-        const distancia =
-            Math.sqrt(
-                Math.pow(
-                    event.clientX -
-                    centroX,
-                    2
-                ) +
-                Math.pow(
-                    event.clientY -
-                    centroY,
-                    2
-                )
-            );
-
-
-        if (distancia < 120) {
-
-            novaPosicaoTouch(
-                event.clientX,
-                event.clientY
-            );
-
-        }
-
-    }
-);
-
-
-// ========================================
-// CLIQUE
+// CLIQUE / TOQUE
 // ========================================
 
 botao.addEventListener(
@@ -310,14 +121,36 @@ botao.addEventListener(
         cliques++;
 
 
+        // =================================
+        // PRIMEIRO, SEGUNDO E TERCEIRO
+        // =================================
+
         if (cliques < 4) {
 
             botao.textContent =
                 `${cliques}/4 ❤️`;
 
+
+            // Espera um pouquinho para
+            // mostrar o contador e foge
+
+            setTimeout(
+                () => {
+
+                    fugir();
+
+                },
+                100
+            );
+
+
             return;
         }
 
+
+        // =================================
+        // QUARTO CLIQUE
+        // =================================
 
         const surpresa =
             document.getElementById(
@@ -330,12 +163,19 @@ botao.addEventListener(
             );
 
 
-        surpresa.style.display =
-            "flex";
+        // Esconde o botão
 
         botao.style.display =
             "none";
 
+
+        // Mostra surpresa
+
+        surpresa.style.display =
+            "flex";
+
+
+        // Toca música
 
         musica.play().catch(() => {
 
@@ -346,15 +186,23 @@ botao.addEventListener(
         });
 
 
+        // =================================
+        // CORAÇÕES
+        // =================================
+
         for (
             let i = 0;
-            i < 20;
+            i < 25;
             i++
         ) {
 
             setTimeout(
-                criarCoracao,
-                i * 150
+                () => {
+
+                    criarCoracao();
+
+                },
+                i * 120
             );
 
         }
@@ -370,31 +218,29 @@ botao.addEventListener(
 function criarCoracao() {
 
     const coracao =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     coracao.innerHTML =
         "❤️";
 
-    coracao.style.position =
-        "fixed";
+
+    coracao.className =
+        "coracao";
+
 
     coracao.style.left =
-        Math.random() * 100 + "vw";
+        Math.random() * 100 +
+        "vw";
 
-    coracao.style.bottom =
-        "-30px";
 
     coracao.style.fontSize =
         (
             15 +
             Math.random() * 25
         ) + "px";
-
-    coracao.style.zIndex =
-        "9999";
-
-    coracao.style.pointerEvents =
-        "none";
 
 
     document.body.appendChild(
@@ -436,7 +282,11 @@ function criarCoracao() {
 
 
     setTimeout(
-        () => coracao.remove(),
+        () => {
+
+            coracao.remove();
+
+        },
         duracao
     );
 }
